@@ -1,6 +1,5 @@
-name: Test qualities of the environment
+name: Test shell and environment
 
-# Runs when a merge request is closed on the deploy branch
 on: push
 
 jobs:
@@ -12,11 +11,19 @@ jobs:
         shell: bash
         run: |
           pwd
-          echo $-
-          set +x
-          REZ=$(.github/workflows/exit-one.sh)
+          echo "Shell before running script to set +e: \"$-\""
+          .github/workflows/set-plus-e.sh
+          echo "Shell after running script to set +e: \"$-\""
+
+          echo "Shell before running script to set +e in a subshell: \"$-\""
+          (.github/workflows/set-plus-e.sh)
+          echo "Shell after running script to set +e in a subshell: \"$-\""
+
+          echo "Running shell script to set+e && exit 1"
+          .github/workflows/exit-one.sh
+          REZ=$?
           echo "$REZ is exit value"
           set -x
-          exit-one.sh
+          echo "Run exit-one.sh in a subshell"
+          (.github/workflows/exit-one.sh)
           echo "Didn't exit"
-          exit $REZ
