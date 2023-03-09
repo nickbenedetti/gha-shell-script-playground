@@ -1,0 +1,22 @@
+name: Test qualities of the environment
+
+# Runs when a merge request is closed on the deploy branch
+on: push
+
+jobs:
+  test-shell:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: test-shell
+        shell: bash
+        run: |
+          pwd
+          echo $-
+          set +x
+          REZ=$(./exit-one.sh)
+          echo "$REZ is exit value"
+          set -x
+          exit-one.sh
+          echo "Didn't exit"
+          exit $REZ
