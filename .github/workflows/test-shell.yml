@@ -14,7 +14,7 @@ jobs:
           pwd
           echo $-
           set +x
-          REZ=$(./exit-one.sh)
+          REZ=$(.github/workflows/exit-one.sh)
           echo "$REZ is exit value"
           set -x
           exit-one.sh
